@@ -1,17 +1,8 @@
 
 # coding: utf-8
-
-# In[ ]:
-
 from typing import List, TypeVar
 
-
-# In[ ]:
-
 from Ability import Ability
-
-
-# In[ ]:
 
 T = TypeVar('T', bound='HealthPoint')
 class HealthPoint(object):
@@ -41,4 +32,3 @@ class HealthPoint(object):
         return HealthPoint(self.name, self.healthy_abilities, self.damaged_abilities)
     def __repr__(self) -> str:
         return "HealthPoint: {0}({1})".format(self.name, "healthy" if self.is_healthy else "damaged")
-

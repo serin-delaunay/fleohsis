@@ -1,12 +1,6 @@
 
 # coding: utf-8
-
-# In[ ]:
-
 from time import perf_counter, sleep
-
-
-# In[ ]:
 
 class FPSLimiter:
     def __init__(self, max_fps : int = 60) -> None:
@@ -33,4 +27,3 @@ class FPSLimiter:
         self._previous_time = perf_counter()
     def get_fps(self) -> int:
         return self._fps
-

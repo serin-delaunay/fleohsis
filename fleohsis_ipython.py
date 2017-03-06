@@ -1,17 +1,8 @@
 
 # coding: utf-8
-
-# In[ ]:
-
 from bearlibterminal import terminal as blt
 
-
-# In[ ]:
-
 get_ipython().magic('load_ext autoreload')
-
-
-# In[ ]:
 
 get_ipython().magic('aimport Ability')
 get_ipython().magic('aimport Abilities')
@@ -20,13 +11,7 @@ get_ipython().magic('aimport HealthPoints')
 get_ipython().magic('aimport HealthTableau')
 get_ipython().magic('aimport FPSLimiter')
 
-
-# In[ ]:
-
 get_ipython().magic('autoreload')
-
-
-# In[ ]:
 
 def main() -> None:
     blt.open()
@@ -52,9 +37,5 @@ def main() -> None:
         blt.set('window:title="FLEOHSIS ({0} FPS)"'.format(fps_limiter.get_fps()))
     blt.close()
 
-
-# In[ ]:
-
 if __name__ == '__main__':
     main()
-

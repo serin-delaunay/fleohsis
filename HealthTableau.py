@@ -1,19 +1,10 @@
 
 # coding: utf-8
-
-# In[ ]:
-
 from collections import Counter
 from typing import List, Union, Optional
 
-
-# In[ ]:
-
 from HealthPoint import HealthPoint
 from Ability import Ability
-
-
-# In[ ]:
 
 class HealthTableau(object):
     def __init__(self) -> None:
@@ -60,4 +51,3 @@ class HealthTableau(object):
             return not self.has_ability('Alive')
     def __repr__(self) -> str:
         return "HealthTableau{0}".format(tuple(self._health_points))
-
