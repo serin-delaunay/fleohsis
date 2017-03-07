@@ -38,7 +38,7 @@ class HealthTableau(object):
                 self.damage_point(i)
                 return
     def has_ability(self, ability: Union[str, Ability]) -> bool:
-        if type(ability) == Ability:
+        if isinstance(ability, Ability):
             return self._ability_counter[ability.name] > 0
         else:
             return self._ability_counter[ability] > 0
