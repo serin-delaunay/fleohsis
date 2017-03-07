@@ -1,7 +1,8 @@
 
 # coding: utf-8
 from collections import Counter
-from typing import List, Union, Optional
+from typing import List, Union, Optional, Iterator
+from obsub import event
 
 from HealthPoint import HealthPoint
 from Ability import Ability
@@ -16,26 +17,29 @@ class HealthTableau(object):
         self._abilities_by_name.update((x.name, x.hooks) for x in abilities)
     def _remove_abilities(self, abilities: List[Ability]) -> None:
         self._ability_counter.subtract(x.name for x in abilities)
+    def __iter__(self) -> Iterator[HealthPoint]:
+        return iter(self._health_points)
+    def before_point_state_change(self, health_point):
+        self._remove_abilities(health_point.get_abilities())
+    def after_point_state_change(self, health_point):
+        self._add_abilities(health_point.get_abilities())
     def insert_point(self, health_point: HealthPoint, index : Optional[int] = None) -> None:
         if index is None:
             self._health_points.append(health_point)
         else:
             self._health_points.insert(index, health_point)
+        health_point.before_health_change += self.before_point_state_change
+        health_point.after_health_change += self.after_point_state_change
         self._add_abilities(health_point.get_abilities())
     def remove_point(self, index: int) -> None:
-        del self._health_points[index]
-        self._remove_abilities(health_point.get_abilities())
-    def damage_point(self, index: int) -> None:
         health_point = self._health_points[index]
-        if health_point.is_healthy:
-            self._remove_abilities(health_point.get_abilities())
-            health_point.is_healthy = False
-            self._add_abilities(health_point.get_abilities())
+        self._remove_abilities(health_point.get_abilities())
+        del health_point
     def inflict_damage(self) -> None:
         # TODO account for different attack and defense abilities
-        for i in range(len(self._health_points)-1,-1,-1):
-            if(self._health_points[i].is_healthy):
-                self.damage_point(i)
+        for health_point in reversed(self._health_points):
+            if(health_point.is_healthy):
+                health_point.is_healthy = False
                 return
     def has_ability(self, ability: Union[str, Ability]) -> bool:
         if isinstance(ability, Ability):
@@ -51,3 +55,5 @@ class HealthTableau(object):
             return not self.has_ability('Alive')
     def __repr__(self) -> str:
         return "HealthTableau{0}".format(tuple(self._health_points))
+    @event
+    def on_altered(self): pass

@@ -2,6 +2,7 @@
 # coding: utf-8
 from bearlibterminal import terminal as blt
 from typing import List
+from functools import partial
 
 from HealthTableau import HealthTableau
 import HealthPoints
@@ -14,15 +15,38 @@ from Game import Game
 
 class Interface(object):
     def __init__(self) -> None:
-        blt.open()
-        self.root = DisplayElement.DisplayDict(ivec(0,0))
-        half_width = blt.state(blt.TK_WIDTH)//2
-        half_window = ivec(half_width,blt.state(blt.TK_HEIGHT))
-        event_log = DisplayElement.PrintArgs(text='', xy=ivec(0,0),bbox=half_window,align_v=DisplayElement.TextAlignmentV.Bottom)
-        self.root.elements['events'] = DisplayElement.Clickable(event_log, Rectangle(ivec(0,0),half_window))
         self.game = Game()
         self.game.on_log += self.on_log
-        # TODO set self.root.tableau
+        
+        blt.open()
+        
+        self.root = DisplayElement.DisplayDict(ivec(0,0))
+        
+        half_width = blt.state(blt.TK_WIDTH)//2
+        half_window = ivec(half_width,blt.state(blt.TK_HEIGHT))
+        event_log = DisplayElement.PrintArgs(
+            text='', xy=ivec(0,0),bbox=half_window,
+            align_v=DisplayElement.TextAlignmentV.Bottom)
+        self.root.elements['events'] = DisplayElement.Clickable(
+            event_log, Rectangle(ivec(0,0),half_window))
+        
+        tableau_origin = ivec(half_width, 0)
+        tableau_display = DisplayElement.DisplayList(tableau_origin)
+        self.root.elements['tableau'] = DisplayElement.Clickable(
+            tableau_display, Rectangle(tableau_origin, half_window))
+        self.on_tableau_altered(self.game.ht)
+    def on_tableau_altered(self, tableau):
+        tableau_display = self.root.elements['tableau']
+        tableau_display.element.elements.clear()
+        for y, health_point in enumerate(tableau):
+            point_display = DisplayElement.PrintArgs(
+                health_point.summary(),ivec(0,y))
+            point_display_c = DisplayElement.Clickable(
+                point_display, Rectangle(0,y))
+            tableau_display.element.elements.append(point_display_c)
+            def on_point_altered(self, point):
+                self.element = self.element._replace(text=point.summary())
+            health_point.after_health_change += partial(on_point_altered, point_display_c)
     def on_log(self, game):
         events = self.root.elements['events']
         events.element = events.element._replace(text='\n'.join(self.game.log_lines))
