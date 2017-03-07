@@ -2,7 +2,7 @@
 # coding: utf-8
 import itertools as it
 from typing import NamedTuple
-from vec import ivec
+from vec import vec
 from enum import Enum
 
 class RectangleEdgeH(Enum):
@@ -18,7 +18,7 @@ class RectangleEdge(NamedTuple):
     horizontal : RectangleEdgeH
     vertical: RectangleEdgeV
 
-class Rectangle(NamedTuple('Rectangle',[('top_left',ivec),('size',ivec)])):
+class Rectangle(NamedTuple('Rectangle',[('top_left',vec),('size',vec)])):
     def bottom_right(self):
         return self.top_left + self.size
     def __contains__(self, xy):
@@ -49,11 +49,11 @@ class Rectangle(NamedTuple('Rectangle',[('top_left',ivec),('size',ivec)])):
         return RectangleEdge(h,v)
     def __iter__(self):
         br = self.bottom_right()
-        return (ivec(x,y) for (x,y) in it.product(range(self.top_left.x, br.x),
+        return (vec(x,y) for (x,y) in it.product(range(self.top_left.x, br.x),
                                                   range(self.top_left.y, br.y)))
     def iter_codes(self):
         br = self.bottom_right()
         for (x,y) in it.product(range(self.top_left.x, br.x),
                                 range(self.top_left.y, br.y)):
-            yield (ivec(x,y), self.border_code(ivec(x,y)))
+            yield (vec(x,y), self.border_code(vec(x,y)))
 

@@ -3,23 +3,23 @@
 from typing import NamedTuple, Optional, Union, Iterator, Dict, Callable, Any, TypeVar
 from bearlibterminal import terminal as blt
 from abc import ABCMeta, abstractmethod
-from vec import ivec
+from vec import vec
 from Colour import Colour, ColourRGBA
 from enum import Enum, auto
 from Rectangle import Rectangle
 
 class DisplayElement(metaclass=ABCMeta):
     @abstractmethod
-    def draw(self, xy : ivec, layer : int = 0) -> None: pass
+    def draw(self, xy : vec, layer : int = 0) -> None: pass
 
 class PutArgs(DisplayElement,
               NamedTuple('PutArgs',
                          [('char', Union[int,str]),
-                          ('xy', ivec),
+                          ('xy', vec),
                           ('fg_colour', Colour),
                           ('bg_colour', Optional[Colour])
                          ])):
-    def draw(self, xy : ivec, layer : int = 0) -> None:
+    def draw(self, xy : vec, layer : int = 0) -> None:
         blt.layer(layer)
         blt.color(self.fg_colour.blt_colour())
         if self.bg_colour is not None:
@@ -36,12 +36,12 @@ PutArgs.__new__.__defaults__ = (ColourRGBA(255,255,255,255),None) # mypy hates t
 class PutExtArgs(DisplayElement,
                  NamedTuple('PutExtArgs',
                             [('char', Union[int,str]),
-                             ('xy', ivec),
-                             ('dxy', ivec),
+                             ('xy', vec),
+                             ('dxy', vec),
                              ('fg_colour', Colour),
                              ('bg_colour', Optional[Colour])
                             ])):
-    def draw(self, xy : ivec, layer : int = 0) -> None:
+    def draw(self, xy : vec, layer : int = 0) -> None:
         blt.color(self.fg_colour.blt_colour())
         if self.bg_colour is not None:
             blt.bkcolor(self.bg_colour.blt_colour())
@@ -77,14 +77,14 @@ TextAlignment.__new__.__defaults__ = (TextAlignmentH.Default, TextAlignmentV.Def
 class PrintArgs(DisplayElement,
                 NamedTuple('PrintArgs',
                            [('text', str),
-                            ('xy', ivec),
-                            ('bbox', Optional[ivec]),
+                            ('xy', vec),
+                            ('bbox', Optional[vec]),
                             ('align_h', TextAlignmentH),
                             ('align_v', TextAlignmentV),
                             ('fg_colour', Colour),
                             ('bg_colour', Optional[Colour])
                            ])):
-    def draw(self, xy : ivec, layer : int = 0) -> None:
+    def draw(self, xy : vec, layer : int = 0) -> None:
         blt.color(self.fg_colour.blt_colour())
         if self.bg_colour is not None:
             blt.bkcolor(self.bg_colour.blt_colour())
@@ -104,12 +104,12 @@ PrintArgs.__new__.__defaults__ = (None, TextAlignmentH.Default, TextAlignmentV.D
 T = TypeVar('T',bound='Clickable')
 class Clickable(object):
     def __init__(self, element : DisplayElement,
-                 mouse_rect : Rectangle = Rectangle(ivec(0,0), ivec(0,0)),
-                 signals : Dict[str, Callable[[ivec,int,Dict[str,Any]],Any]] = {}) -> None:
+                 mouse_rect : Rectangle = Rectangle(vec(0,0), vec(0,0)),
+                 signals : Dict[str, Callable[[vec,int,Dict[str,Any]],Any]] = {}) -> None:
         self.element = element
         self.mouse_rect = mouse_rect
         self.signals = signals.copy()
-    def find_target(xy : ivec, signal : int) -> Optional[T]:
+    def find_target(xy : vec, signal : int) -> Optional[T]:
         if xy in self.mouse_rect:
             if isinstance(self.element, DisplayGroup):
                 for clickable in self.element:
@@ -121,11 +121,11 @@ class Clickable(object):
         return None
 
 class DisplayGroup(DisplayElement, metaclass=ABCMeta):
-    def __init__(self, xy : ivec) -> None:
+    def __init__(self, xy : vec) -> None:
         self.clear_elements()
         self.layer = 0
         self.xy = xy
-    def draw(self, xy : ivec, layer : int = 0) -> None:
+    def draw(self, xy : vec, layer : int = 0) -> None:
         xy = self.xy + xy
         for clickable in self:
             element = clickable.element

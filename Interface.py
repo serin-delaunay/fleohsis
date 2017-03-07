@@ -9,7 +9,7 @@ import HealthPoints
 import Colour
 import DisplayElement
 from Rectangle import Rectangle
-from vec import ivec
+from vec import vec
 from FPSLimiter import FPSLimiter
 from Game import Game
 
@@ -20,17 +20,17 @@ class Interface(object):
         
         blt.open()
         
-        self.root = DisplayElement.DisplayDict(ivec(0,0))
+        self.root = DisplayElement.DisplayDict(vec(0,0))
         
         half_width = blt.state(blt.TK_WIDTH)//2
-        half_window = ivec(half_width,blt.state(blt.TK_HEIGHT))
+        half_window = vec(half_width,blt.state(blt.TK_HEIGHT))
         event_log = DisplayElement.PrintArgs(
-            text='', xy=ivec(0,0),bbox=half_window,
+            text='', xy=vec(0,0),bbox=half_window,
             align_v=DisplayElement.TextAlignmentV.Bottom)
         self.root.elements['events'] = DisplayElement.Clickable(
-            event_log, Rectangle(ivec(0,0),half_window))
+            event_log, Rectangle(vec(0,0),half_window))
         
-        tableau_origin = ivec(half_width, 0)
+        tableau_origin = vec(half_width, 0)
         tableau_display = DisplayElement.DisplayList(tableau_origin)
         self.root.elements['tableau'] = DisplayElement.Clickable(
             tableau_display, Rectangle(tableau_origin, half_window))
@@ -40,7 +40,7 @@ class Interface(object):
         tableau_display.element.elements.clear()
         for y, health_point in enumerate(tableau):
             point_display = DisplayElement.PrintArgs(
-                health_point.summary(),ivec(0,y))
+                health_point.summary(),vec(0,y))
             point_display_c = DisplayElement.Clickable(
                 point_display, Rectangle(0,y))
             tableau_display.element.elements.append(point_display_c)
@@ -54,7 +54,7 @@ class Interface(object):
         # init log
         log = []
         # draw first frame
-        self.root.draw(ivec(0,0))
+        self.root.draw(vec(0,0))
         fps_limiter = FPSLimiter()
         blt.set('window:title="FLEOHSIS ({0} FPS)"'.format(fps_limiter.get_fps()))
         blt.refresh()
@@ -69,6 +69,6 @@ class Interface(object):
                 else:
                     self.game.advance()
                     blt.clear()
-                    self.root.draw(ivec(0,0))
+                    self.root.draw(vec(0,0))
                     blt.refresh()
         blt.close()
