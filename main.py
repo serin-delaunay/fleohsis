@@ -1,7 +1,5 @@
 
 # coding: utf-8
-from bearlibterminal import terminal as blt
-
 from Interface import Interface
 
 def main() -> None:
@@ -10,3 +8,5 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
+
+

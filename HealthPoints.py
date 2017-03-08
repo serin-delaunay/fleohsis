@@ -1,15 +1,16 @@
 
 # coding: utf-8
 import HealthPoint
-import Ability
-import Abilities
 
-Heart = HealthPoint.HealthPoint("Heart",[],[Abilities.Dead])
+def get_health_point(health_point : str) -> HealthPoint:
+    return globals()[health_point]
 
-Splanch = HealthPoint.HealthPoint("Splanch",[Abilities.Alive],[])
+Heart = HealthPoint.HealthPoint("Heart",[],['Dead'])
 
-Kidney = HealthPoint.HealthPoint("Kidney",[Abilities.Alive],[])
+Splanch = HealthPoint.HealthPoint("Splanch",['Alive'],[])
 
-Arm = HealthPoint.HealthPoint("Arm",[Abilities.Attack],[])
+Kidney = HealthPoint.HealthPoint("Kidney",['Alive'],[])
 
-Phylactery = HealthPoint.HealthPoint("Phylactery",[Abilities.Undead],[])
+Arm = HealthPoint.HealthPoint("Arm",['Attack'],[])
+
+Phylactery = HealthPoint.HealthPoint("Phylactery",['Undead'],[])

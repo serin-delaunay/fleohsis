@@ -34,7 +34,7 @@ class Interface(object):
         tableau_display = DisplayElement.DisplayList(tableau_origin)
         self.root.elements['tableau'] = DisplayElement.Clickable(
             tableau_display, Rectangle(tableau_origin, half_window))
-        self.on_tableau_altered(self.game.ht)
+        self.on_tableau_altered(self.game.hta)
     def on_tableau_altered(self, tableau):
         tableau_display = self.root.elements['tableau']
         tableau_display.element.elements.clear()
