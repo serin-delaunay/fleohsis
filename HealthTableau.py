@@ -1,14 +1,13 @@
 
 # coding: utf-8
-from typing import List, Union, Optional, Iterator, Any, TypeVar
+from typing import Optional, Iterator
 from obsub import event
 
-from HealthPoint import HealthPoint
-from HealthPoints import get_health_point
 from Ability import Ability
 from AbilityBag import AbilityBag
+from HealthPoint import HealthPoint
+from HealthPoints import get_health_point
 
-T = TypeVar('T',bound='HealthTableau')
 class HealthTableau(object):
     def __init__(self) -> None:
         self._health_points = []
@@ -36,21 +35,10 @@ class HealthTableau(object):
         health_point = self._health_points[index]
         self._abilities.remove_abilities(health_point.get_abilities().names())
         del self._health_points[index]
-    def defend(self : T,
-               attack_abilities : AbilityBag,
-               attacker : T,
-               attack_mode : Optional[str]=None) -> None:
-        event_args = {
-            'attacker':attacker,
-            'attack_abilities':attack_abilities,
-            'defender':self,
-            'attack_mode':attack_mode
-        }
-        attack_abilities.call('begin_attack',event_args)
     def is_dead(self) -> bool:
         if self._abilities.has_ability('Undead'):
             return False
-        elif self_abilities.has_ability('Dead'):
+        elif self._abilities.has_ability('Dead'):
             return True
         else:
             return not self._abilities.has_ability('Alive')
@@ -58,5 +46,3 @@ class HealthTableau(object):
         return "HealthTableau{0}".format(tuple(self._health_points))
     @event
     def on_altered(self): pass
-
-

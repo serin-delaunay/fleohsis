@@ -6,6 +6,7 @@ from functools import partial
 
 from HealthTableau import HealthTableau
 import HealthPoints
+from Logger import messages, debug
 import Colour
 import DisplayElement
 from Rectangle import Rectangle
@@ -16,7 +17,7 @@ from Game import Game
 class Interface(object):
     def __init__(self) -> None:
         self.game = Game()
-        self.game.on_log += self.on_log
+        messages.on_log += self.on_log
         
         blt.open()
         
@@ -47,9 +48,10 @@ class Interface(object):
             def on_point_altered(self, point):
                 self.element = self.element._replace(text=point.summary())
             health_point.after_health_change += partial(on_point_altered, point_display_c)
-    def on_log(self, game):
+    def on_log(self, logger):
         events = self.root.elements['events']
-        events.element = events.element._replace(text='\n'.join(self.game.log_lines))
+        events.element = events.element._replace(text='\n'.join(
+            messages.last_n(blt.state(blt.TK_HEIGHT))))
     def run(self) -> None:
         # init log
         log = []

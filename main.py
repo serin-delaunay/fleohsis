@@ -1,6 +1,7 @@
 
 # coding: utf-8
 from Interface import Interface
+from Logger import debug
 
 def main() -> None:
     i = Interface()
@@ -8,5 +9,3 @@ def main() -> None:
 
 if __name__ == '__main__':
     main()
-
-

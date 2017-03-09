@@ -1,15 +1,21 @@
 
 # coding: utf-8
-from Ability import Ability
+from Ability import Ability, _abilities
 
 def get_ability(ability : str) -> Ability:
-    return globals()[ability]
+    return _abilities[ability]
 
-Alive = Ability("Alive", "Able to sustain life")
+Ability("Alive", "Able to sustain life")
 
-Dead = Ability("Dead", "Too injured to sustain life")
+Ability("Dead", "Too injured to sustain life")
 
-Undead = Ability("Undead", "Animated by necromancy")
+Ability("Undead", "Animated by necromancy")
 
-Attack = Ability("Attack", "Can attack enemies",
-                 target='target_normal')
+Ability("Target Attack (Normal)", "", True,
+        target_health_point='target_normal')
+
+Ability("Begin Attack", "", True,
+        begin_attack='begin_attack')
+
+Ability("Take Damage", "", True,
+        damage_point='take_damage')

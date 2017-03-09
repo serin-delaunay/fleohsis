@@ -32,9 +32,11 @@ class HealthPoint(object):
     is_healthy = property(_get_health, _set_health)
     def make_description(self) -> str:
         healthy_description = '\n'.join(x.description
-                                        for x in self._healthy_abilities.abilities())
+                                        for x in self._healthy_abilities.abilities()
+                                        if not x.hidden)
         damaged_description = '\n'.join(x.description
-                                        for x in self._damaged_abilities.abilities())
+                                        for x in self._damaged_abilities.abilities()
+                                        if not x.hidden)
         descriptions = []
         if healthy_description:
             descriptions.append('Healthy:\n' + healthy_description)
