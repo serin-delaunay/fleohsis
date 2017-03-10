@@ -20,7 +20,13 @@ def begin_attack(event_args : EventArgs):
         debug.log('targetted health point: {0}'.format(targetted_health_point))
         if targetted_health_point.is_healthy:
             debug.log('targetted health point is healthy')
-            targetted_health_point.get_abilities().call('damage_point', event_args)
+            event_args['damage_resisted'] = False
+            targetted_health_point.get_abilities().call('resist_damage_point', event_args)
+            event_args['defender'].call('resist_damage_tableau', event_args)
+            if not event_args['damage_resisted']:
+                targetted_health_point.is_healthy = False
+                debug.log('damage taken')
+                return
         else:
             debug.log('targetted health point is already damaged')
     else:
@@ -37,11 +43,10 @@ def target_normal(event_args : EventArgs):
     debug.log('found no valid target')
 
 @hook_priority(0)
-def take_damage(event_args : EventArgs):
-    debug.log('taking damage')
-    target = event_args['targetted_health_point']
-    if target.is_healthy:
-        target.is_healthy = False
-        debug.log('damage taken')
-        return
-    debug.log('failed to take damage')
+def target_piercing(event_args : EventArgs):
+    pass
+
+@hook_priority(0)
+def resist_damage(event_args : EventArgs):
+    debug.log('resisting damage')
+    event_args['damage_resisted'] = True

@@ -10,11 +10,14 @@ from Ability import Ability
 T = TypeVar('T', bound='HealthPoint')
 class HealthPoint(object):
     def __init__(self, name : str,
+                 common_abilities : List[str],
                  healthy_abilities : List[str],
                  damaged_abilities : List[str]) -> None:
         self.name = name
-        self._healthy_abilities = AbilityBag(healthy_abilities)
-        self._damaged_abilities = AbilityBag(damaged_abilities)
+        self._healthy_abilities = AbilityBag(common_abilities)
+        self._damaged_abilities = AbilityBag(common_abilities)
+        self._healthy_abilities.add_abilities(healthy_abilities)
+        self._damaged_abilities.add_abilities(damaged_abilities)
         self.description = self.make_description()
         self.__is_healthy = True
     def _get_health(self) -> bool:
@@ -50,6 +53,7 @@ class HealthPoint(object):
             return self._damaged_abilities
     def copy(self : T) -> T:
         return HealthPoint(self.name,
+                           [],
                            list(self._healthy_abilities.names()),
                            list(self._damaged_abilities.names()))
     def __repr__(self) -> str:

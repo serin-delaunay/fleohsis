@@ -4,6 +4,7 @@ from typing import Optional, Iterator
 from obsub import event
 
 from Ability import Ability
+from AbilityHooks import EventArgs
 from AbilityBag import AbilityBag
 from HealthPoint import HealthPoint
 from HealthPoints import get_health_point
@@ -42,6 +43,8 @@ class HealthTableau(object):
             return True
         else:
             return not self._abilities.has_ability('Alive')
+    def call(self, event : str, event_args : EventArgs):
+        self._abilities.call(event, event_args)
     def __repr__(self) -> str:
         return "HealthTableau{0}".format(tuple(self._health_points))
     @event

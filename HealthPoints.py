@@ -5,12 +5,27 @@ import HealthPoint
 def get_health_point(health_point : str) -> HealthPoint:
     return globals()[health_point].copy()
 
-Heart = HealthPoint.HealthPoint("Heart",['Take Damage'],['Dead'])
+Heart = HealthPoint.HealthPoint("Heart",
+                                ['Body Type'],
+                                [],
+                                ['Dead'])
 
-Splanch = HealthPoint.HealthPoint("Splanch",['Take Damage','Alive'],[])
+Splanch = HealthPoint.HealthPoint("Splanch",
+                                  ['Body Type'],
+                                  ['Alive'],
+                                  [])
 
-Kidney = HealthPoint.HealthPoint("Kidney",['Take Damage','Alive'],[])
+Kidney = HealthPoint.HealthPoint("Kidney",
+                                 ['Body Type'],
+                                 ['Alive'],
+                                 [])
 
-Arm = HealthPoint.HealthPoint("Arm",['Take Damage','Begin Attack','Target Attack (Normal)'],[])
+Arm = HealthPoint.HealthPoint("Arm",
+                              ['Body Type'],
+                              ['Begin Attack','Target Attack (Normal)'],
+                              [])
 
-Phylactery = HealthPoint.HealthPoint("Phylactery",['Take Damage','Undead'],[])
+Phylactery = HealthPoint.HealthPoint("Phylactery",
+                                     ['Equipment Type'],
+                                     ['Undead'],
+                                     [])

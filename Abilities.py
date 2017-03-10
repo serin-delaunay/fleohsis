@@ -17,5 +17,22 @@ Ability("Target Attack (Normal)", "", True,
 Ability("Begin Attack", "", True,
         begin_attack='begin_attack')
 
-Ability("Take Damage", "", True,
-        damage_point='take_damage')
+Ability("Resist Damage (Point)", "",
+        resist_damage_point='resist_damage')
+
+Ability("Resist Damage (Tableau)", "",
+        resist_damage_tableau='resist_damage')
+
+Ability("Body Type", "Represents a part or quality of the body")
+
+Ability("Mental Type", "Represents a part or quality of the mind")
+
+Ability("Magic Type", "Represents a supernatural effect or capability")
+
+Ability("Equipment Type", "Represents a piece of equipment")
+
+Ability("Armour Type", "Represents a piece of armour")
+
+Ability("Weapon Type", "Represents a weapon")
+
+Ability("Shield Type", "Represents a shield")
