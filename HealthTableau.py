@@ -4,7 +4,7 @@ from typing import Optional, Iterator
 from obsub import event
 
 from Ability import Ability
-from AbilityHooks import EventArgs
+from Events import EventArgs
 from AbilityBag import AbilityBag
 from HealthPoint import HealthPoint
 from HealthPoints import get_health_point

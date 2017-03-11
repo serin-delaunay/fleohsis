@@ -22,7 +22,7 @@ Kidney = HealthPoint.HealthPoint("Kidney",
 
 Arm = HealthPoint.HealthPoint("Arm",
                               ['Body Type'],
-                              ['Begin Attack','Target Attack (Normal)'],
+                              ['Attack'],
                               [])
 
 Phylactery = HealthPoint.HealthPoint("Phylactery",

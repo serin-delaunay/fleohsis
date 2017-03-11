@@ -14,8 +14,13 @@ Ability("Undead", "Animated by necromancy")
 Ability("Target Attack (Normal)", "", True,
         target_health_point='target_normal')
 
-Ability("Begin Attack", "", True,
-        begin_attack='begin_attack')
+Ability("Attack", "", True,
+        list_attack_modes='register_weapon',
+        prepare_attack='prepare_attack',
+        execute_attack='execute_attack',
+        base_attack=[
+            'base_attack_abilities_default',
+            'base_attack_points_default'])
 
 Ability("Resist Damage (Point)", "",
         resist_damage_point='resist_damage')

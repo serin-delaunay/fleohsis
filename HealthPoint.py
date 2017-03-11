@@ -14,10 +14,13 @@ class HealthPoint(object):
                  healthy_abilities : List[str],
                  damaged_abilities : List[str]) -> None:
         self.name = name
-        self._healthy_abilities = AbilityBag(common_abilities)
-        self._damaged_abilities = AbilityBag(common_abilities)
-        self._healthy_abilities.add_abilities(healthy_abilities)
-        self._damaged_abilities.add_abilities(damaged_abilities)
+        self._list_common_abilities = list(common_abilities)
+        self._list_healthy_abilities = list(healthy_abilities)
+        self._list_damaged_abilities = list(damaged_abilities)
+        self._healthy_abilities = AbilityBag(self._list_common_abilities)
+        self._damaged_abilities = AbilityBag(self._list_common_abilities)
+        self._healthy_abilities.add_abilities(self._list_healthy_abilities)
+        self._damaged_abilities.add_abilities(self._list_damaged_abilities)
         self.description = self.make_description()
         self.__is_healthy = True
     def _get_health(self) -> bool:
@@ -53,9 +56,9 @@ class HealthPoint(object):
             return self._damaged_abilities
     def copy(self : T) -> T:
         return HealthPoint(self.name,
-                           [],
-                           list(self._healthy_abilities.names()),
-                           list(self._damaged_abilities.names()))
+                           self._list_common_abilities,
+                           self._list_healthy_abilities,
+                           self._list_damaged_abilities)
     def __repr__(self) -> str:
         return "HealthPoint: {0}({1})".format(self.name,
                                               "healthy" if self.is_healthy

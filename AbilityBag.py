@@ -3,10 +3,12 @@
 from collections import Counter
 from typing import List, Union, Optional, Iterator
 from Ability import Ability
+
 from Abilities import get_ability
 from EventHookBag import EventHookBag
 from sortedcontainers import SortedListWithKey
 from Logger import debug
+from Events import check_event
 
 class AbilityBag(object):    
     def __init__(self, abilities: List[str] = []) -> None:
@@ -22,8 +24,9 @@ class AbilityBag(object):
             ability = get_ability(ability)
             if self._ability_counter[ability.name] == 1:
                 debug.log('ability is new, updating event hooks')
-                for event, hook in ability.hooks.items():
-                    self._hooks.add_hook(event, hook)
+                for event, hooks in ability.hooks.items():
+                    for hook in hooks:
+                        self._hooks.add_hook(event, hook)
             else:
                 debug.log('ability is not new (count={0})'.format(
                     self._ability_counter[ability.name]))
@@ -34,8 +37,9 @@ class AbilityBag(object):
             if isinstance(ability,str):
                 ability = get_ability(ability)
             if self._ability_counter[ability.name] == 0:
-                for event, hook in ability.hooks.items():
-                    self._hooks.remove_hook(event, hook)
+                for event, hooks in ability.hooks.items():
+                    for hook in hooks:
+                        self._hooks.remove_hook(event, hook)
         self._clean_counter()
     def has_ability(self, ability: Union[str, Ability]) -> bool:
         if isinstance(ability, Ability):
@@ -43,6 +47,7 @@ class AbilityBag(object):
         else:
             return self._ability_counter[ability] > 0
     def call(self, event, event_args):
+        check_event(event)
         self._hooks.call(event, event_args)
     def _clean_counter(self):
         self._ability_counter = Counter(
