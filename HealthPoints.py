@@ -35,4 +35,7 @@ Phylactery = HealthPoint("Phylactery",
                          ['Undead'],
                          [])
 
-
+SpareMuscles = HealthPoint("Spare Muscles",
+                           ['Body Type'],
+                           ['Bonus Damage'],
+                           [])

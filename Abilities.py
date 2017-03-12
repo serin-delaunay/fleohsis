@@ -25,12 +25,15 @@ Ability("Attack", "", True,
 Ability("Normal Attack", "Performs a normal attack",
         base_attack=[
             'base_attack_abilities_default',
-            'base_attack_points_default'])
+            'add_attack_point_normal'])
 
 Ability("Piercing Attack", "Performs a piercing attack",
         base_attack=[
             'base_attack_abilities_default',
-            'base_attack_points_piercing'])
+            'add_attack_point_piercing'])
+
+Ability("Bonus Damage", "Adds an extra point of damage",
+        augment_attack='add_attack_point_copy')
 
 Ability("Resist Damage (Point)", "",
         resist_damage_point='resist_damage')

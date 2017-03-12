@@ -17,8 +17,8 @@ class Game(object):
         ht.insert_point('Heart')
         ht.insert_point('Splanch')
         ht.insert_point('Phylactery')
-        ht.insert_point('Spear')
         ht.insert_point('Arm')
+        ht.insert_point('SpareMuscles')
         ht.insert_point('Spear')
         return ht
     def process_attack(self,

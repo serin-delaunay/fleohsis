@@ -13,5 +13,5 @@ class DamagePoint(object):
         self.abilities.add_abilities(abilities)
     def call(self, event, event_args):
         self.abilities.call(event, event_args)
-#     def copy(self):
-#         return DamagePoint(self.abilities, self.source)
+    def copy(self):
+        return DamagePoint(self.abilities.names(), self.source)

@@ -63,16 +63,25 @@ def _base_attack_abilities(abilities : List[str]):
 
 base_attack_abilities_default = _base_attack_abilities(["Attack"])
 
-def _base_attack_points(point : List[str]):
+def _add_attack_point(point : List[str]):
     @hook_priority(0)
     def base_attack_points(event_args : EventArgs):
         from DamagePoint import DamagePoint
         event_args['damage_tableau'].add_damage_point(DamagePoint(point, event_args['weapon']))
     return base_attack_points
 
-base_attack_points_default = _base_attack_points(["Target Attack (Normal)"])
+add_attack_point_normal = _add_attack_point(["Target Attack (Normal)"])
 
-base_attack_points_piercing = _base_attack_points(["Target Attack (Piercing)"])
+add_attack_point_piercing = _add_attack_point(["Target Attack (Piercing)"])
+
+@hook_priority(0)
+def add_attack_point_copy(event_args : EventArgs):
+    damage_tableau = event_args['damage_tableau']
+    try:
+        last_point = damage_tableau._damage_points[-1]
+    except IndexError:
+        return
+    damage_tableau.add_damage_point(last_point.copy())
 
 @hook_priority(0)
 def prepare_attack(event_args : EventArgs):
