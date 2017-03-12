@@ -25,4 +25,7 @@ _events = {
     'augment_attack',
     'execute_attack',
     'target_health_point',
+    'resist_damage_point',
+    'resist_damage_tableau',
+    'resist_bypass'
 }

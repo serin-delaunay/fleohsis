@@ -17,8 +17,9 @@ class Game(object):
         ht.insert_point('Heart')
         ht.insert_point('Splanch')
         ht.insert_point('Phylactery')
+        ht.insert_point('Spear')
         ht.insert_point('Arm')
-        ht.insert_point('Arm')
+        ht.insert_point('Spear')
         return ht
     def process_attack(self,
                        defender : HealthTableau,
@@ -49,7 +50,9 @@ class Game(object):
                 health_point.get_abilities().call('list_attack_modes', event_args)
             attack_modes = event_args['attack_modes']
             if attack_modes:
+                debug.log('possible attack modes: {0}'.format(attack_modes))
                 weapon, attack_mode = choice(attack_modes)
+                debug.log('chosen attack mode: {0}, {1}'.format(weapon, attack_mode))
                 self.process_attack(self.hta, self.htb, weapon, attack_mode)
                 messages.log("Damaged. {0}.".format(
                     "Dead" if self.hta.is_dead() else "Not dead"))

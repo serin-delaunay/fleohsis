@@ -20,7 +20,26 @@ def target_normal(event_args : EventArgs):
 
 @hook_priority(0)
 def target_piercing(event_args : EventArgs):
-    pass
+    debug.log('finding target health point')
+    found_healthy_point = False
+    for health_point in reversed(event_args['defender']):
+        if health_point.is_healthy:
+            if not found_healthy_point:
+                found_healthy_point = True
+                target_point = health_point
+                debug.log('found first healthy point: {0}'.format(target_point))
+                event_args['targetted_health_point'] = target_point
+                event_args['point_to_bypass'] = target_point
+                event_args['bypass_successful'] = True
+                target_point.get_abilities().call('resist_bypass', event_args)
+                if not event_args['bypass_successful']:
+                    debug.log('bypass unsuccessful')
+                    return
+                else:
+                    debug.log('bypass successful')
+            else:
+                event_args['targetted_health_point'] = health_point
+                return
 
 @hook_priority(0)
 def resist_damage(event_args : EventArgs):
@@ -52,6 +71,8 @@ def _base_attack_points(point : List[str]):
     return base_attack_points
 
 base_attack_points_default = _base_attack_points(["Target Attack (Normal)"])
+
+base_attack_points_piercing = _base_attack_points(["Target Attack (Piercing)"])
 
 @hook_priority(0)
 def prepare_attack(event_args : EventArgs):
