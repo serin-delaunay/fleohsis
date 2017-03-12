@@ -24,20 +24,28 @@ class Interface(object):
         self.root = DisplayElement.DisplayDict(vec(0,0))
         
         half_width = blt.state(blt.TK_WIDTH)//2
+        half_height = blt.state(blt.TK_HEIGHT)//2
         half_window = vec(half_width,blt.state(blt.TK_HEIGHT))
+        quarter_window = vec(half_width, half_height)
         event_log = DisplayElement.PrintArgs(
             text='', xy=vec(0,0),bbox=half_window,
             align_v=DisplayElement.TextAlignmentV.Bottom)
         self.root.elements['events'] = DisplayElement.Clickable(
             event_log, Rectangle(vec(0,0),half_window))
         
-        tableau_origin = vec(half_width, 0)
-        tableau_display = DisplayElement.DisplayList(tableau_origin)
-        self.root.elements['tableau'] = DisplayElement.Clickable(
-            tableau_display, Rectangle(tableau_origin, half_window))
+        hta_origin = vec(half_width, 0)
+        hta_display = DisplayElement.DisplayList(hta_origin)
+        self.root.elements[self.game.hta] = DisplayElement.Clickable(
+            hta_display, Rectangle(hta_origin, quarter_window))
         self.on_tableau_altered(self.game.hta)
+        
+        htb_origin = quarter_window
+        htb_display = DisplayElement.DisplayList(htb_origin)
+        self.root.elements[self.game.htb] = DisplayElement.Clickable(
+            htb_display, Rectangle(htb_origin, quarter_window))
+        self.on_tableau_altered(self.game.htb)
     def on_tableau_altered(self, tableau):
-        tableau_display = self.root.elements['tableau']
+        tableau_display = self.root.elements[tableau]
         tableau_display.element.elements.clear()
         for y, health_point in enumerate(tableau):
             point_display = DisplayElement.PrintArgs(

@@ -12,6 +12,7 @@ class Game(object):
     def __init__(self) -> None:
         self.hta = self.make_generic_health_tableau()
         self.htb = self.make_generic_health_tableau()
+        self.turn_a = True
     def make_generic_health_tableau(self) -> HealthTableau:
         ht = HealthTableau()
         ht.insert_point('Heart')
@@ -40,12 +41,23 @@ class Game(object):
         debug.log('executing attack')
         damage_tableau.execute_attack(event_args)
     def advance(self) -> None:
-        if not self.hta.is_dead():
+        if self.turn_a:
+            attacker = self.hta
+            defender = self.htb
+        else:
+            attacker = self.htb
+            defender = self.hta
+        self.turn_a = not self.turn_a
+        if attacker.is_dead():
+            messages.log('Too dead to attack')
+        elif defender.is_dead():
+            messages.log('No point attacking a corpse')
+        else:
             event_args = {
-                'attacker':self.htb,
+                'attacker':attacker,
                 'attack_modes':[]
             }
-            for health_point in self.htb:
+            for health_point in attacker:
                 event_args['weapon'] = health_point
                 health_point.get_abilities().call('list_attack_modes', event_args)
             attack_modes = event_args['attack_modes']
@@ -53,10 +65,8 @@ class Game(object):
                 debug.log('possible attack modes: {0}'.format(attack_modes))
                 weapon, attack_mode = choice(attack_modes)
                 debug.log('chosen attack mode: {0}, {1}'.format(weapon, attack_mode))
-                self.process_attack(self.hta, self.htb, weapon, attack_mode)
+                self.process_attack(defender, attacker, weapon, attack_mode)
                 messages.log("Damaged. {0}.".format(
-                    "Dead" if self.hta.is_dead() else "Not dead"))
+                    "Dead" if defender.is_dead() else "Not dead"))
             else:
                     messages.log("Unable to attack")
-        else:
-            messages.log("Already dead")
